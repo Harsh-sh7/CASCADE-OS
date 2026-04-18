@@ -1,15 +1,15 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Terminal } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams();
   const errorParam = searchParams.get('error');
-
+  
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -111,5 +111,19 @@ export default function LoginPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-black flex flex-col items-center justify-center px-6 font-mono">
+        <div className="w-full max-w-sm border border-zinc-900 bg-black p-12 text-center text-zinc-500 text-[10px] uppercase tracking-widest">
+          Loading_System...
+        </div>
+      </main>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
